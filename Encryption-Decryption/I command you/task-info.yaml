@@ -1,0 +1,145 @@
+type: edu
+custom_name: stage4
+files:
+- name: src/encryptdecrypt/Main.java
+  visible: true
+  text: |
+    package encryptdecrypt;
+
+    import java.util.*;
+
+    public class Main {
+        public static void main(String[] args) {
+            String option, text;
+            StringBuilder ss = new StringBuilder("");
+            Scanner read = new Scanner(System.in);
+            option =read.nextLine();
+            text = read.nextLine();
+            int key = read.nextInt();
+            var result = option.equals("enc") ?encrypt(text,key):decrypt(text,key);
+
+            System.out.println(result);
+
+        }
+
+        public static StringBuilder encrypt(String text , int key){
+          //  c >= 'a' && c <= 'z' ? (char) ('z' - c + 'a') : c
+            StringBuilder cypherText = new StringBuilder("");
+            for (int i = 0; i < text.length(); i++) {
+                char temp = text.charAt(i);
+                int y = ((int) temp + key);
+                cypherText.append((char) ((int) y));
+                /*if (temp >= 'a' && temp <= 'z') {
+                    int y = ((int) temp + key) %((int)'z');
+                    // System.out.println(y);
+                    if (y <= 97)
+                        cypherText.append((char) ((int) y + 96));
+                    else
+                        cypherText.append((char) ((int) y));
+                } else
+                    cypherText.append(temp);
+            */
+            }
+            //System.out.println(cypherText);
+            return cypherText;
+        }
+        public static StringBuilder decrypt(String cypherText , int key){
+            //  c >= 'a' && c <= 'z' ? (char) ('z' - c + 'a') : c
+            StringBuilder decryptText = new StringBuilder("");
+            for (int i = 0; i < cypherText.length(); i++) {
+                char temp = cypherText.charAt(i);
+                int y = ((int) temp - key);
+                decryptText.append((char) ((int) y));
+                /*if (temp >= 'a' && temp <= 'z') {
+                    int y = ((int) temp + key) %((int)'z');
+                    // System.out.println(y);
+                    if (y <= 97)
+                        decryptText.append((char) ((int) y + 96));
+                    else
+                        decryptText.append((char) ((int) y));
+                } else
+                    decryptText.append(temp);
+            */
+            }
+            //System.out.println(decryptText);
+            return decryptText;
+        }
+    }
+  learner_created: false
+- name: test/EncryptDecryptTest.java
+  visible: false
+  text: |
+    import encryptdecrypt.Main;
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.CheckResult;
+    import org.hyperskill.hstest.testcase.TestCase;
+
+    import java.util.List;
+
+    public class EncryptDecryptTest extends StageTest<String> {
+        public EncryptDecryptTest() {
+            super(Main.class);
+        }
+
+        @Override
+        public List<TestCase<String>> generate() {
+            return List.of(
+                new TestCase<String>()
+                    .addArguments(
+                        "-mode", "enc",
+                        "-key", "5",
+                        "-data", "Welcome to hyperskill!"
+                    )
+                    .setAttach("\\jqhtrj%yt%m~ujwxpnqq&"),
+
+                new TestCase<String>()
+                    .addArguments(
+                        "-key", "0",
+                        "-mode", "enc",
+                        "-data", "Hello"
+                    )
+                    .setAttach("Hello"),
+
+                new TestCase<String>()
+                    .addArguments(
+                        "-key", "1",
+                        "-data", "012345678",
+                        "-mode", "enc"
+                    )
+                    .setAttach("123456789"),
+
+                new TestCase<String>()
+                    .addArguments(
+                        "-mode", "dec",
+                        "-data", "\\jqhtrj%yt%m~ujwxpnqq&",
+                        "-key", "5"
+                    )
+                    .setAttach("Welcome to hyperskill!"),
+
+                new TestCase<String>()
+                    .addArguments(
+                        "-mode", "dec",
+                        "-key", "0",
+                        "-data", "Hi"
+                    )
+                    .setAttach("Hi"),
+
+                new TestCase<String>()
+                    .addArguments(
+                        "-mode", "dec",
+                        "-key", "1",
+                        "-data", "222233334444"
+                    )
+                    .setAttach("111122223333")
+            );
+        }
+
+        @Override
+        public CheckResult check(String reply, String clue) {
+            return new CheckResult(reply.trim().equals(clue.trim()));
+        }
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/projects/46/stages/248/implement
+status: Solved
+record: 3
